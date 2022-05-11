@@ -12,6 +12,7 @@ const serviceLocator = require('./src/config/di');
 const messageModule = require('./src/messages/message.module');
 const config = require('./src/config/configuration');
 const messageRoutes = require('./src/messages/message.route');
+const viewEngine = require('./src/config/viewEngine');
 
 const logger = serviceLocator.get('logger');
 const requestLogger = serviceLocator.get('requestlogger');
@@ -26,6 +27,7 @@ server.use(express.json());
 server.use(express.urlencoded({ extended: false }));
 server.use(cors());
 
+viewEngine(server);
 // setup requests logging
 server.use(requestLogger);
 

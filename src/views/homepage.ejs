@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Messenger Bot</title>
+
+    <meta name="keywords" content="Messages, Bot, Messenger, Facebook" />
+    <meta
+      name="description"
+      content="Page for conversation with a Messenger Bot"
+    />
+  </head>
+  <body>
+    <main>
+      <article>
+        <div class="section-wrapper">
+          <h2>Welcome to AdaKerja Test bot bot 😇</h2>
+
+          <p>
+            Welcome to the Bot Messenger app! Bot is very friendly and wants to
+            know you better! Start the conversation by typing a greeting message
+            🖐
+          </p>
+        </div>
+      </article>
+
+      <article>
+        <div class="section-wrapper">
+          <h2>Rules for conversation:</h2>
+          <ul>
+            <li>Greeting: "hi", "hey", "hello"</li>
+            <li>Accepting: "yup", "yes", "yeah", "sure", "yep", "i do"</li>
+            <li>Denying: "no", "nah", "nope", "not now", "maybe later"</li>
+            <li>
+              Gratitude: "thanks", "thx", "thank you", "thank you very much",
+              "thanks a lot", "thanks!", "thank you!"
+            </li>
+          </ul>
+        </div>
+      </article>
+
+      <article>
+        <div class="section-wrapper"></div>
+      </article>
+    </main>
+    <!-- Messenger Chat Plugin Code -->
+    <div id="fb-root"></div>
+
+    <!-- Your Chat Plugin code -->
+    <div id="fb-customer-chat" class="fb-customerchat">
+    </div>
+
+    <script>
+      var chatbox = document.getElementById('fb-customer-chat');
+      chatbox.setAttribute("page_id", "114315734603053");
+      chatbox.setAttribute("attribution", "biz_inbox");
+    </script>
+
+    <!-- Your SDK code -->
+    <script>
+      window.fbAsyncInit = function() {
+        FB.init({
+          xfbml            : true,
+          version          : 'v13.0'
+        });
+      };
+
+      (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+    </script>
+  </body>
+</html>

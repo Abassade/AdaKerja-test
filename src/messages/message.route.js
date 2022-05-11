@@ -2,10 +2,7 @@
 const routes = function routes(server, serviceLocator) {
   const messageController = serviceLocator.get('messageController');
   server.get('/', (req, res) => {
-    return res.send({
-      success: true,
-      message: 'AdaKerja Bot API v1'
-    })
+    return res.render("../views/homepage.ejs");
   });
 
   server.get('/webhook', (req, res) => messageController.getWebhook(req, res));
