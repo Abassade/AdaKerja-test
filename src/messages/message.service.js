@@ -23,14 +23,14 @@ class MessageService {
     return this.mongoMessageMessage.deleteOne(param);
   }
 
-  async handleMessage(sender_psid, message) {
+  async handleMessage(sender_psid, message, paramsConst) {
     try {
         if (message.quick_reply) {
-            handleQuickReply(sender_psid, message);
+            this.handleQuickReply(sender_psid, message, paramsConst);
         } else if (message.attachments) {
-                handleAttachmentMessage(sender_psid, message);
+                this.handleAttachmentMessage(sender_psid, message, paramsConst);
         } else if (message.text) {
-                handleTextMessage(sender_psid, message);
+                this.handleTextMessage(sender_psid, message, paramsConst);
         } 
         else{
             callSendAPI(sender_psid,`The bot needs more training. You said "${message.text}". Try to say "Hi" or "#start_over" to restart the conversation..`);
@@ -292,6 +292,86 @@ class MessageService {
         callSendAPI(sender_psid,`Thank you for your answer. If you wish to start this conversation again write "#start_over". Goodbye 🖐`);
     }
     else{
+        callSendAPI(sender_psid,`The bot needs more training. You said "${message.text}". Try to say "Hi" or "#start_over" to restart the conversation.`);
+    }
+  }
+  async handleQuickReply(sender_psid, message, paramsConst){
+    const {
+      USER_FIRST_NAME,
+      USER_BIRTH_DATE,
+      LATEST_MESSAGE,
+    } = paramsConst;
+    let mess = message.text;
+    mess = mess.toLowerCase();
+
+    // user agreed to answer questions
+    if(mess === "sure"){
+        if(!USER_FIRST_NAME){
+            callSendAPI(sender_psid,`First, please write below your first name`);
+        }
+        else {
+            callSendAPI(sender_psid,`The bot needs more training. You said "${message.text}". Try to say "Hi" or "#start_over" to restart the conversation.`);
+        }
+    }
+    // user agreed on his first name
+    else if (mess === "yes") {
+        for(let i = 3; i < LATEST_MESSAGE.length; i++){
+            USER_FIRST_NAME += LATEST_MESSAGE[i];
+
+            if(LATEST_MESSAGE[i] === " ") break;
+        }
+        USER_FIRST_NAME = capitalizeFirstLetter(USER_FIRST_NAME);
+        console.log(USER_FIRST_NAME);
+
+        callSendAPI(sender_psid,`You agreed that your first name is ${USER_FIRST_NAME}. Secondly, we would like to know your birth date. Write it down below in the format YYYY-MM-DD. Example: 1987-03-25`);
+    }
+    // user agreed on his birth date
+    else if (mess === "yep"){
+        for(let i = 3; i < LATEST_MESSAGE.length; i++){
+            USER_BIRTH_DATE += LATEST_MESSAGE[i];
+
+            if(LATEST_MESSAGE[i] === " ") break;
+        }
+        console.log(USER_BIRTH_DATE);
+
+        let resp = {
+            "text": `You agreed that your birth date is ${USER_BIRTH_DATE}. Would you like to know how many days are until your next birtday?`,
+            "quick_replies":[
+              {
+                "content_type":"text",
+                "title": "I do",
+                "payload": "i do"
+              },{
+                "content_type":"text",
+                "title":"Not interested",
+                "payload": "not interested"
+              }
+            ]
+        };
+
+        callSendAPI(sender_psid,``, resp);
+    }
+    // user agreed to know birth date days
+    else if (mess === "i do"){
+        let days_left = countBirthDays();
+
+        // bad information introduced
+        if(days_left === -1){
+            callSendAPI(sender_psid,`Birth date introduced is false. If you wish to start this conversation again write "#start_over". Goodbye 🖐`);
+        }
+        else{ // valid information -> proceed to calculus
+
+            // sending 2 carousel products
+            let resp = initialGifts();
+
+            callSendAPI(sender_psid,`There are ${days_left} days until your next birthday. Here are some gifts you can buy for yourself 🙂`);
+            callSendPromo(sender_psid, resp);
+        }
+    }
+    else if (mess === "not now" || mess === "no" || mess === "not at all" || mess === "not interested"){
+            callSendAPI(sender_psid,`Thank you for your answer. If you wish to start this conversation again write "#start_over". Goodbye 🖐`);
+    }
+    else {
         callSendAPI(sender_psid,`The bot needs more training. You said "${message.text}". Try to say "Hi" or "#start_over" to restart the conversation.`);
     }
 }

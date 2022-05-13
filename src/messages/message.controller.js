@@ -53,7 +53,8 @@ class Message {
       if (req.body.object === 'page'){
         /* Iterate over each entry, there can be multiple entries 
         if callbacks are batched. */
-        req.body.entry.forEach(function(entry) {
+        const messageServiceInstance = this.messageService;
+        req.body.entry.forEach(async (entry) => {
         // Iterate over each messaging event
         let webhook_event = entry.messaging[0];
         console.log(webhook_event);
@@ -76,12 +77,12 @@ class Message {
             COUNT_MESSAGES += 1;
 
             WEBHOOK_MESS = webhook_event.message.text;
-            this.messageService.handleMessage(sender_psid, webhook_event.message, paramsConst);
+            await messageServiceInstance.handleMessage(sender_psid, webhook_event.message, paramsConst);
         } else if (webhook_event.postback) {
             COUNT_MESSAGES += 1;
 
             WEBHOOK_MESS = webhook_event.postback.payload;
-            this.messageService.handlePostback(sender_psid, webhook_event.postback, paramsConst);
+            await messageServiceInstance.handlePostback(sender_psid, webhook_event.postback, paramsConst);
         }
         });
         res.sendStatus(200);

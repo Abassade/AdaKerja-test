@@ -41,8 +41,8 @@ serviceLocator.register('messageService', () => {
 // Controller instance
 serviceLocator.register('messageController', (serviceLocator) => {
   const logger = serviceLocator.get('logger');
-  const service = serviceLocator.get('messageService');
-  return new messageController(logger, Response, service);
+  const messageService = serviceLocator.get('messageService');
+  return new messageController(logger, Response, messageService);
 });
 
 module.exports = serviceLocator;
