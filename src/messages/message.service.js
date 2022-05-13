@@ -47,7 +47,7 @@ class MessageService {
   }
 
   async handleTextMessage(sender_psid, message, paramsConst){
-    const {
+    let {
       USER_FIRST_NAME,
       USER_BIRTH_DATE,
       LATEST_MESSAGE,
@@ -296,7 +296,7 @@ class MessageService {
     }
   }
   async handleQuickReply(sender_psid, message, paramsConst){
-    const {
+    let {
       USER_FIRST_NAME,
       USER_BIRTH_DATE,
       LATEST_MESSAGE,

@@ -63,7 +63,7 @@ class Message {
         const sender_psid = webhook_event.sender.id;
         SENDER_ID = webhook_event.sender.id;
         console.log('Sender PSID: ' + sender_psid);
-        const paramsConst = {
+        let paramsConst = {
           USER_FIRST_NAME,
           USER_BIRTH_DATE,
           LATEST_MESSAGE,
