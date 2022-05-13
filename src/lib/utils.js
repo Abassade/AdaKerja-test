@@ -13,26 +13,22 @@ class Utils {
     return true;
   }
 
-  static generateRandom(length, chars = null) {
-    let dict = chars;
-    if (!chars) {
-      dict = '0123456789ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstvuwxyz-';
-    }
-    let result = '';
-    for (let i = length; i > 0; i -= 1) {
-      result += dict[Math.round(Math.random() * (dict.length - 1))];
-    }
-    return result;
-  }
+  static countBirthDays(birthDate){
+    const today = new Date();
 
-  static async authenticateParams(passedJson, neededFields) {
-    const missingFields = [];
-    neededFields.forEach((element) => {
-      if (!passedJson[element]) {
-        missingFields.push(element);
-      }
-    });
-    return missingFields;
+    const user_year = parseInt(birthDate.substring(0, 4), 10);
+    const user_month = parseInt(birthDate.substring(5, 7), 10);
+    const user_day = parseInt(birthDate.substring(8, 10), 10);
+
+    if(user_year >= today.getFullYear() || user_month > 12 || user_day > 31){
+        return -1;
+    }
+    else{ 
+        const oneDay = 24 * 60 * 60 * 1000;
+        const days_left = Math.round(Math.abs( ( (today - new Date(today.getFullYear(), user_month - 1, user_day)) / oneDay) ) );
+
+        return days_left;
+    }
   }
 }
 module.exports = Utils;
